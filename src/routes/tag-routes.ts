@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import RouterBase, { RouterInterface } from "../classes/router-base";
+import TagService from "../services/tag-service";
+import { TagModelInterface, TagModelType } from "../models/tag";
+import { OK } from "http-status";
 
 export default class TagRoutes extends RouterBase implements RouterInterface {
   /** @protected slug string */
@@ -22,30 +25,64 @@ export default class TagRoutes extends RouterBase implements RouterInterface {
     this.router.delete("/", this.deleteItem);
   }
 
-  public async getItems(req: Request, res: Response, next: NextFunction) {
+  /**
+   * @public
+   * @param req Request
+   * @param res Response
+   * @param next NextFunction
+   * @returns Promise<any>
+   */
+  public async getItems(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
-      const tags = ["tag1", "tag2", "tag3"];
-      return res.json({ tags });
+      const service = new TagService();
+      const data: TagModelInterface[] = await service.getTags();
+
+      return res.status(OK).json(data);
     } catch (error) {
       next(error);
     }
   }
 
-  public async createItem(req: Request, res: Response, next: NextFunction) {
+  /**
+   * @public
+   * @param req Request
+   * @param res Response
+   * @param next NextFunction
+   * @returns Promise<any>
+   */
+  public async createItem(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
-      const { tag } = req.body;
-      console.log(`${tag} <-- Tag to create`);
+      const service: TagService = new TagService();
+      const data: TagModelInterface = await service.createTag(
+        req.body as TagModelType
+      );
 
-      return res.status(201).send();
+      return res.status(OK).json(data);
     } catch (error) {
+      console.log({ error });
       next(error);
     }
   }
 
   public async updateItem(req: Request, res: Response, next: NextFunction) {
     try {
-      const { tag } = req.body;
-      console.log(`${tag} <-- Tag to update`);
+      const { title, desc, priority } = req.body;
+
+      const service = new TagService();
+      const data = await service.findOneAndUpdate(
+        { title },
+        { priority, desc },
+        { new: true }
+      );
+      console.log({ data });
 
       return res.status(200).send();
     } catch (error) {
@@ -55,8 +92,11 @@ export default class TagRoutes extends RouterBase implements RouterInterface {
 
   public async deleteItem(req: Request, res: Response, next: NextFunction) {
     try {
-      const { tag } = req.body;
-      console.log(`${tag} <-- Tag to delete`);
+      const { title, desc, priority } = req.body;
+
+      const service = new TagService();
+      const data = await service.deleteTag(title);
+      console.log({ data });
 
       return res.status(200).send();
     } catch (error) {

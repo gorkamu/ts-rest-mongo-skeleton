@@ -11,6 +11,9 @@ export default class App {
   /** * @protected _app Application */
   protected readonly _app: Application;
 
+  /**
+   * @public
+   */
   constructor() {
     this._app = express();
     this._setupMiddlewares();

@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  app-db:
+    container_name: app-db
+    image: 'mongo:7.0.8'
+    env_file: ./.env
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db:/data/db:rw
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
+    name: app-network
