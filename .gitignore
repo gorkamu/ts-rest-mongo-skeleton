@@ -1,0 +1,33 @@
+# Node.js files
+node_modules/
+.cache/
+.nvm/
+.pnpm/
+.npm/
+
+# Build and temporary files
+dist/
+tmp/
+coverage/
+logs/
+
+# IDE and editor files
+.vscode/
+.idea/
+.editorconfig
+.eslintcache
+
+# MongoDB data
+db/
+*.bson
+
+# Environment files
+.env
+.env.development
+.env.production
+
+# Logs and test results
+npm-debug.log
+yarn-debug.log
+jest*.json
+*.log
