@@ -27,13 +27,6 @@ export class RepositoryBase<T extends mongoose.Document>
 
   /**
    * @param cond
-   */
-  public async findOne(cond?: Object): Promise<any> {
-    return this._model.findOne(cond).lean();
-  }
-
-  /**
-   * @param cond
    * @param projection
    * @param options
    * @param sortParams
@@ -53,28 +46,13 @@ export class RepositoryBase<T extends mongoose.Document>
   }
 
   /**
-   * @param cond
+   * @param _id
    * @param update
-   * @param options
    */
-  public async findOneAndUpdate(
-    cond?: Object,
-    update?: Object,
-    options?: Object
-  ): Promise<any> {
-    return this._model.findOneAndUpdate(cond, update, options);
-  }
+  public async updateOne(_id: string, update?: Object): Promise<any> {
+    const cond = { _id: new mongoose.Types.ObjectId(_id) };
+    const options = { new: true }
 
-  /**
-   * @param cond
-   * @param update
-   * @param options
-   */
-  public async updateOne(
-    cond?: Object,
-    update?: Object,
-    options?: Object
-  ): Promise<any> {
     return this._model.updateOne(cond, update, options);
   }
 
@@ -82,11 +60,7 @@ export class RepositoryBase<T extends mongoose.Document>
    * @param item
    */
   public async create(item: T): Promise<T> {
-    try {
-      return this._model.create(item) as Promise<T>;
-    } catch (error) {
-      throw error;
-    }
+    return await this._model.create(item) as Promise<T>;
   }
 
   /**

@@ -1,5 +1,4 @@
 import {RepositoryBase} from "./repository-base";
-import mongoose from "mongoose";
 
 export default class ServiceBase
 {
@@ -36,13 +35,13 @@ export default class ServiceBase
 
     /**
      * @public
-     * @param _id string
+     * @param id string
      * @returns Promise<any>
      */
-    public async delete(_id: string): Promise<any> {
-        console.log(`Deleting ${this._entityName} with ID: ${_id}`);
+    public async delete(id: string): Promise<any> {
+        console.log(`Deleting ${this._entityName} with ID: ${id}`);
 
-        return this._repository.delete(_id);
+        return this._repository.delete(id);
     }
 
     /**
@@ -64,16 +63,10 @@ export default class ServiceBase
      * @public
      * @param id
      * @param update
-     * @param options
      */
-    public async update(
-        id: string,
-        update?: Object,
-        options?: Object
+    public async update( id: string, update?: Object
     ): Promise<any> {
-
-        const cond = { _id: new mongoose.Types.ObjectId(id) };
-
-        return this._repository.findOneAndUpdate(cond, update, { new: true });
+        console.log(`Deleting ${this._entityName} with ID: ${id}`);
+        return this._repository.updateOne(id, update);
     }
 }
