@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 import { IRepositoryRead, IRepositoryWrite } from "../interfaces/index";
 
-export class Repository<T extends mongoose.Document>
+export class RepositoryBase<T extends mongoose.Document>
   implements IRepositoryRead<T>, IRepositoryWrite<T>
 {
   /** @param _model mongoose.Model<mongoose.Document> */
@@ -34,13 +34,6 @@ export class Repository<T extends mongoose.Document>
 
   /**
    * @param cond
-   */
-  public async findOneHydrated(cond?: Object): Promise<any> {
-    return this._model.findOne(cond);
-  }
-
-  /**
-   * @param cond
    * @param projection
    * @param options
    * @param sortParams
@@ -57,13 +50,6 @@ export class Repository<T extends mongoose.Document>
     }
 
     return qs;
-  }
-
-  /**
-   * @param cond
-   */
-  public async countDocuments(cond?: Object): Promise<any> {
-    return this._model.countDocuments(cond);
   }
 
   /**
@@ -108,12 +94,5 @@ export class Repository<T extends mongoose.Document>
    */
   public async delete(_id: string): Promise<any> {
     return this._model.deleteOne({ _id: new mongoose.Types.ObjectId(_id) });
-  }
-
-  /**
-   * @param cond
-   */
-  public async deleteMany(cond?: Object): Promise<any> {
-    return this._model.deleteMany(cond);
   }
 }
